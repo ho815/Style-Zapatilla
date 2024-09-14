@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zapatería Dedos</title>
+    <link rel="stylesheet" href="styles.css">
+
+<style>
+
+body {
+    background-color: #169b85;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000080;
+    padding: 10px;
+    color: white;
+}
+
+.header .logo img {
+    max-height: 80px;
+}
+
+.header .nav {
+    background-color: #ffa500; /* Color de fondo naranja para la barra de navegación */
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.header .nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.header .carrito {
+    display: flex;
+    align-items: center;
+}
+
+.header .carrito img {
+    margin-right: 5px;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.productos {
+    margin-bottom: 20px;
+}
+
+.productos-grid {
+    display: flex;
+    overflow: hidden; /* Asegura que las imágenes no se desborden */
+    white-space: nowrap; /* Mantiene las imágenes en una sola fila */
+    animation: slideIn 2s ease-out; /* Animación de entrada */
+}
+
+.producto {
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+    margin-right: 20px; /* Espacio entre los productos */
+    width: 200px; /* Ajusta el ancho según sea necesario */
+}
+
+.producto img {
+    width: 100%; /* Ajusta el ancho de la imagen al tamaño del contenedor */
+    height: 150px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Mantiene la proporción de la imagen y cubre el contenedor */
+}
+
+/* Animación para mover las imágenes hacia la derecha */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%); /* Empieza fuera de la vista por la izquierda */
+    }
+    to {
+        transform: translateX(0); /* Termina en su posición original */
+    }
+}
+
+.ubicacion iframe {
+    max-width: 100%;
+    height: auto;
+    border: 0;
+}
+
+.form-ubicacion, .form-contacto {
+    margin-top: 20px;
+}
+
+fieldset {
+    border: none;
+    margin: 10px 0;
+}
+
+legend {
+    font-weight: bold;
+}
+
+.mensaje-error {
+    color: red;
+}
+
+.mensaje-exito {
+    color: green;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="file"], textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+button {
+    background-color: #000080;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #000055;
+}
+/* Botones de "Agregar al Carrito" */
+button.agregar-carrito {
+    background-color: #800080; /* Morado oscuro */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+button.agregar-carrito:hover {
+    background-color: #4b0082; /* Morado más oscuro para el hover */
+}
+
+/* Botones de "Enviar" */
+button.enviar {
+    background-color: #004d00; /* Verde oscuro */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+button.enviar:hover {
+    background-color: #003300; /* Verde más oscuro para el hover */
+
+/* Estilos generales */
+body {
+    background-color: #169b85;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Flex container para alinear los elementos en fila */
+.contenedor-flex {
+    display: flex;
+    justify-content: space-around; /* Espacio alrededor de los elementos */
+    align-items: flex-start; /* Alinea los elementos en la parte superior */
+    gap: 20px; /* Espacio entre los elementos */
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en múltiples líneas si es necesario */
+}
+
+.flex-item {
+    flex: 1 1 30%; /* Hace que cada columna ocupe aproximadamente el 30% del contenedor */
+    max-width: 30%; /* Asegura que no ocupe más del 30% del ancho del contenedor */
+    padding: 10px;
+    box-sizing: border-box;
+    min-width: 250px; /* Evita que los elementos se reduzcan demasiado */
+}
+
+/* Asegura que los iframes y el video de TikTok se ajusten correctamente */
+#ubicacion iframe,
+#video-tiktok blockquote {
+    width: 100%;
+    height: 300px;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+    .contenedor-flex {
+        flex-direction: column; /* Hace que los elementos se apilen verticalmente en pantallas pequeñas */
+    }
+
+    .flex-item {
+        max-width: 100%; /* Asegura que los elementos ocupen el ancho completo en pantallas pequeñas */
+    }
+}
+
+
+}
+
+
+</style>
+    <script>
+        // Variables para el carrito
+        let cantidadProductos = 0;
+        let totalGastado = 0;
+
+        // Función para agregar productos al carrito
+        function agregarAlCarrito(precio) {
+            // Incrementar la cantidad de productos
+            cantidadProductos++;
+            // Sumar el precio al total gastado
+            totalGastado += precio;
+
+            // Actualizar la cantidad de productos en la pantalla
+            document.getElementById("cantidadProductos").textContent = cantidadProductos;
+            // Actualizar el total gastado en la pantalla, asegurando que tenga 2 decimales
+            document.getElementById("totalGastado").textContent = totalGastado.toFixed(2);
+        }
+
+        // Función para animar la información de la empresa
+        function animarTextoEmpresa() {
+            let elemento = document.getElementById("textoEmpresa");
+            let texto = "Zapatería Dedos es una tienda dedicada a ofrecer los mejores modelos de zapatillas de las marcas más reconocidas.";
+            let i = 0;
+            elemento.textContent = "";  // Limpiar el contenido
+            let intervalo = setInterval(function() {
+                elemento.textContent += texto.charAt(i);
+                i++;
+                if (i > texto.length) {
+                    clearInterval(intervalo); // Detener animación al completar el texto
+                }
+            }, 50); // Velocidad de la animación (50ms por carácter)
+        }
+
+        // Función para validar el formulario
+        function validarFormulario(event) {
+            event.preventDefault(); // Prevenir el envío del formulario hasta validar
+
+            // Obtener los valores de los campos
+            let name = document.getElementById("nombre").value;
+            let email = document.getElementById("correo").value;
+            let pass = document.getElementById("contraseña").value;
+            let naci = document.getElementById("nacimiento").value;
+            let cv = document.getElementById("curriculo").value;
+            let comentario = document.getElementById("comentario").value;
+
+            // Obtener elementos para mostrar mensajes de error o éxito
+            let mensajeError = document.getElementById("mensajeError");
+            let mensajeExito = document.getElementById("mensajeExito");
+
+            // Limpiar mensajes previos
+            mensajeError.textContent = "";
+            mensajeExito.textContent = "";
+
+            // Validación básica
+            if (name === "" || email === "" || pass === "" || naci === "" || cv === "" || comentario === "") {
+                mensajeError.textContent = "Por favor, completa todos los campos.";
+            } else {
+                mensajeExito.textContent = "¡Formulario enviado correctamente!";
+                // Aquí puedes agregar la lógica para enviar el formulario si es necesario
+            }
+        }
+
+        // Iniciar la animación del texto de la empresa al cargar la página
+        window.onload = function() {
+            animarTextoEmpresa();
+        }
+    </script>
+</head>
+<body>
+
+  <!-- Cabecera con logo y menú -->
+<header class="header">
+    <div class="logo">
+        <img src="img/dedos.jpg" alt="Logo de la tienda" width="80" height="auto">
+    </div>
+
+        <!-- Barra de navegación con fondo naranja -->
+        <div class="nav">
+            <a href="#productos">Productos</a>
+            <a href="#ubicacion">Ubicación</a>
+            <a href="#video-tiktok">TikTok</a>
+            <a href="#contacto">Contacto</a>
+            <a href="#sobre-nosotros">Sobre Nosotros</a> <!-- Enlace corregido -->
+        </div>
+
+          <!-- Botones en la sección de Productos -->
+        <div class="carrito">
+            <button class="agregar-carrito" onclick="agregarAlCarrito(120)">Agregar al Carrito</button>
+            <span id="cantidadProductos">0</span> productos |
+            Total: $<span id="totalGastado">0.00</span>
+        </div>
+    </header>
+
+       <!-- Contenido principal -->
+       <div class="main-content">
+      <section id="productos" class="productos">
+        <h2>Productos</h2>
+        <div class="productos-grid">
+            <div class="producto">
+                    <img src="../style Zapatilla/img/adidas.jpg" alt="Zapatillas Adidas" width="100">
+                    <p>Zapatillas Adidas - $120.00</p>
+                    <button class="agregar-carrito" style="background-color: pink; color: white;" onclick="agregarAlCarrito(120)">Agregar al Carrito</button>
+                </div>
+                <div class="producto">
+                    <img src="../style Zapatilla/img/nike.jpeg" alt="Zapatillas Nike" width="100">
+                    <p>Zapatillas Nike - $130.00</p>
+                    <button class="agregar-carrito" style="background-color: pink; color: white;" onclick="agregarAlCarrito(130)">Agregar al Carrito</button>
+                </div>
+                <div class="producto">
+                    <img src="../style Zapatilla/img/puma.jpeg" alt="Zapatillas Puma" width="100">
+                    <p>Zapatillas Puma - $150.00</p>
+                    <button class="agregar-carrito" style="background-color: pink; color: white;" onclick="agregarAlCarrito(150)">Agregar al Carrito</button>
+                </div>
+                <div class="producto">
+                    <img src="../style Zapatilla/img/reebok.jpeg" alt="Zapatillas Reebok" width="100">
+                    <p>Zapatillas Reebok - $140.00</p>
+                    <button class="agregar-carrito" style="background-color: pink; color: white;" onclick="agregarAlCarrito(140)">Agregar al Carrito</button>
+                </div>
+                <div class="producto">
+                    <img src="../style Zapatilla/img/skechers go malk.jpg" alt="Zapatillas Skechers" width="100">
+                    <p>Zapatillas Skechers - $100.00</p>
+                    <button class="agregar-carrito" style="background-color: pink; color: white;" onclick="agregarAlCarrito(100)">Agregar al Carrito</button>
+                </div>
+                <div class="producto">
+                    <img src="../style Zapatilla/img/new balance.jpeg" alt="Zapatillas New Balance" width="100">
+                    <p>Zapatillas New Balance - $110.00</p>
+                    <button class="agregar-carrito" style="background-color: pink; color: white;" onclick="agregarAlCarrito(110)">Agregar al Carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flex container para las secciones Ubicación, TikTok y Sobre Nosotros -->
+        <div class="contenedor-flex">
+            <div id="ubicacion" class="flex-item">
+            <h2>Ubicación</h2>
+            <p>Calle Gamarra 592, Trujillo, Perú.</p>
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m24!1m12!1m3!1d31598.035096145777!2d-79.06174319318158!3d-8.126470231789744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m9!3e6!4m3!3m2!1d-8.1441441!2d-79.0494817!4m3!3m2!1d-8.1113686!2d-79.0259786!5e0!3m2!1ses-419!2spe!4v1725582665992!5m2!1ses-419!2spe" 
+                width="600" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <form onsubmit="validarFormularioUbicacion(event)" class="form-ubicacion">
+                <fieldset>
+                    <legend>Elige tipo de pago</legend>
+                    <select id="tipoPago">
+                        <option value="contado">Contado</option>
+                        <option value="credito">Crédito</option>
+                    </select>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Satisfacción por la atención</legend>
+                    <input type="checkbox" id="bueno"><label for="bueno"> Bueno</label><br>
+                    <input type="checkbox" id="regular"><label for="regular"> Regular</label><br>
+                    <input type="checkbox" id="malo"><label for="malo"> Malo</label><br>
+                </fieldset>
+
+                <!-- Botón de envío en el formulario de ubicación -->
+                <button class="enviar" type="submit">Enviar</button>
+            </form>
+
+            <!-- Mensajes de validación -->
+            <p id="mensajeErrorUbicacion" class="mensaje-error"></p>
+            <p id="mensajeExitoUbicacion" class="mensaje-exito"></p>
+        </section>
+               
+         <!-- Columna Sobre Nosotros -->
+         <div id="sobre-nosotros" class="flex-item"> <!-- Eliminado el segundo id duplicado -->
+            <h2>Sobre Nosotros</h2>
+            <p id="textoEmpresa"></p>
+        </div>
+    </div>
+   
+     <!-- Columna TikTok -->
+    <div id="video-tiktok" class="flex-item">
+        <h2>Video</h2>
+    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@tiendasdedos/video/7336810934788246789?_r=1&_t=8piZSR54R9S" data-video-id="7336810934788246789" style="max-width: 605px;min-width: 325px;" >
+        <section> 
+            <a target="_blank" title="@tiendasdedos" href="https://www.tiktok.com/@tiendasdedos?refer=embed">@tiendasdedos</a> 
+            🎬🎉
+            <a target="_blank" title="sonido original - tiendasdedos" href="https://www.tiktok.com/music/sonido-original-7336810934788246789?refer=embed">♬ sonido original - tiendasdedos</a>
+        </section> 
+        </blockquote> 
+        <script async src="https://www.tiktok.com/embed.js"></script>
+    </section>
+
+          <!-- Sección de contacto -->
+        <div id="contacto" class="flex-item">
+            <h2>Contacto</h2>
+            <!-- Formulario de contacto aquí -->
+            <form onsubmit="validarFormulario(event)" class="form-contacto">
+                <label for="nombre">Nombre:</label><br>
+                <input type="text" id="nombre" name="nombre"><br><br>
+            
+                <label for="correo">Correo Electrónico:</label><br>
+                <input type="email" id="correo" name="correo"><br><br>
+            
+                <label for="contraseña">Contraseña:</label><br>
+                <input type="password" id="contraseña" name="contraseña"><br><br>
+            
+                <label for="nacimiento">Fecha de Nacimiento:</label><br>
+                <input type="date" id="nacimiento" name="nacimiento"><br><br>
+            
+                <label for="curriculo">Ingresa tu Currículo:</label><br>
+                <input type="file" id="curriculo" name="curriculo"><br><br>
+            
+                <label for="comentario">Comentario:</label><br>
+                <textarea id="comentario" name="comentario"></textarea><br><br>
+            
+               <!-- Botón de envío en el formulario de contacto -->
+              <button class="enviar" type="submit">Enviar</button>
+            </form>
+            
+            <p id="mensajeError" style="color: red;"></p>
+            <p id="mensajeExito" style="color: green;"></p>
+        </section>
+    </main>
+</body>
+</html>
